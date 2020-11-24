@@ -91,7 +91,7 @@ class Game(object):
             objectives_box = TextBox(
                 "Objective: {}".format(OBJECTIVE_LVL - count_destroyed_droids), font1, 10, 85)
             time_box = TextBox("Time: {0:.2f}".format(
-                initial_time), font1, WINDOW_WIDTH - 150, 0)
+                initial_time), font1, WINDOW_WIDTH - 150, 5)
             energy_box = TextBox("Energy: {}".format(
                 energy), font1, WINDOW_WIDTH - 150, 45)
             info_box = TextBox(
