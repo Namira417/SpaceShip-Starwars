@@ -52,8 +52,8 @@ class Player(pygame.sprite.Sprite):
         elif self.rect.right > WINDOW_WIDTH:
             self.rect.right = WINDOW_WIDTH
 
-        if self.rect.top <= WINDOW_HEIGHT / 2:  # To determine that it does not exceed half of the screen
-            self.rect.top = WINDOW_HEIGHT / 2
+        if self.rect.top <= 0:  # 유닛 화면 전체이동
+            self.rect.top = 0
         elif self.rect.bottom >= WINDOW_HEIGHT:
             self.rect.bottom = WINDOW_HEIGHT
 
