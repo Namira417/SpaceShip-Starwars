@@ -39,7 +39,7 @@ DELAY_EXPLOSION = 5  # To simulate a delay in the explosion animation
 ADDNEW_ASTEROID_RATE = 7
 RATE_PLAYER_SPEED = 6
 # Probability that determines if it's an energetic asteroid.
-PROB_ENERGETIC_ASTEROID = 0.4
+PROB_ENERGETIC_ASTEROID = 0.2
 OBJECTIVE_LVL = 100 # Destroy 100 enemies
 
 
