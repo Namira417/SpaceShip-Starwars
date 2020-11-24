@@ -142,13 +142,13 @@ class Asteroid(pygame.sprite.Sprite):
             self.image = self.select_image(
                 os.path.join("resources", "energetic_asteroid.png"))
             if self.size_asteroid <= 10:
-                self.energy_lvl = 3
-            elif self.size_asteroid <= 20:
-                self.energy_lvl = 5
-            elif self.size_asteroid <= 30:
-                self.energy_lvl = 7
-            elif self.size_asteroid > 30:
                 self.energy_lvl = 10
+            elif self.size_asteroid <= 20:
+                self.energy_lvl = 7
+            elif self.size_asteroid <= 30:
+                self.energy_lvl = 5
+            elif self.size_asteroid > 30:
+                self.energy_lvl = 3
         else:  # Asteroid without energy
             self.image = self.select_image(
                 os.path.join("resources", "asteroid.png"))
