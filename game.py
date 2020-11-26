@@ -34,6 +34,7 @@ count_destroyed_droids = 0
 
 class Game(object):
     def __init__(self):
+        self.big_laser = 0
         super(Game, self).__init__()
         pygame.init()
         pygame.mixer.init(frequency=22050, size=-16, channels=8, buffer=4096)
@@ -60,6 +61,8 @@ class Game(object):
             initial_time = time.perf_counter()
             enemy_creation_period = 2
             energy = INIT_ENERGY
+            gage = 0
+            ammo = 0
             count_destroyed_droids = 0 # Reset value
             points = 0
             asteroid_counter = 0
@@ -94,10 +97,16 @@ class Game(object):
                 initial_time), font1, WINDOW_WIDTH - 150, 5)
             energy_box = TextBox("Energy: {}".format(
                 energy), font1, WINDOW_WIDTH - 150, 45)
+            gage_box = TextBox("Gage: {}".format(
+                gage), font1, WINDOW_WIDTH - 150, 80)
+            specialammo_box = GreenTextBox("SpecialAmmo: {}".format(
+                ammo), font2, WINDOW_WIDTH - 190, WINDOW_HEIGHT - 80)
+            press1_box = TextBox("Gage 100%: ", font2, WINDOW_WIDTH - 260, WINDOW_HEIGHT - 50)
+            press2_box = RedTextBox("Press 'Z' key!", font2, WINDOW_WIDTH - 150, WINDOW_HEIGHT - 50)    
             info_box = TextBox(
                 "Press: ESC-Exit     F1-Help     F2-About...", font1, 10, WINDOW_HEIGHT - 20)
             group_box = pygame.sprite.RenderUpdates(
-                points_box, top_score_box, objectives_box, time_box, energy_box, info_box)
+                points_box, top_score_box, objectives_box, time_box, energy_box, gage_box, specialammo_box, press1_box, press2_box, info_box)
 
             music_channel.play(background_sound, loops=-1, maxtime=0, fade_ms=0)
             loop_counter = 0
@@ -122,10 +131,22 @@ class Game(object):
                             if event.key == K_ESCAPE:
                                 self.exit_game()
                             if event.key == K_SPACE:
-                                laser_player_sound.play()
-                                ###############################################################################################################################
-                                group_laser_player.add(
-                                    PlayerLaser(player.rect.midtop, energy))
+                                if self.big_laser == 0:
+                                    ammo = 0
+                                    laser_player_sound.play()
+                                    group_laser_player.add(
+                                        PlayerLaser(player.rect.midtop, energy))
+                                else:
+                                    laser_player_sound.play()
+                                    group_laser_player.add(
+                                        PlayerLaser1(player.rect.midtop))
+                                    self.big_laser = self.big_laser - 1
+                                    ammo = ammo - 1
+                            if gage >= 100:
+                                if event.key == K_z: # 필살기 z키
+                                    self.big_laser = 13
+                                    ammo = 13
+                                    gage = 0
                         elif event.type == KEYUP:  # We ask if you have stopped pressing any key
                             player.x_speed, player.y_speed = (0, 0)
 
@@ -181,6 +202,7 @@ class Game(object):
                     group_explosion.add(Explosion(player.rect))
                     player.kill()
                     loop_counter = 0
+                    self.big_laser = 0
                 # Player wins
                 elif count_destroyed_droids >= OBJECTIVE_LVL:
                     if points > top_score:
@@ -188,6 +210,7 @@ class Game(object):
                     press_keys = False  # To disabled pulse input
                     player.kill()
                     loop_counter = 0
+                    self.big_laser = 0
                     break
 
                 # -----------------------------------------------------------------------------------------
@@ -199,12 +222,24 @@ class Game(object):
                 # Collision with laser and enemy
                 for droid in pygame.sprite.groupcollide(enemy_team, group_laser_player, True, True):
                     points += 15
+                    gage += 3
+                    if gage >= 100:
+                        gage = 100
+                    if self.big_laser > 0 and self.big_laser < 13:
+                        group_laser_player.add(
+                            PlayerLaser1(droid.rect.midtop))
                     group_explosion.add(Explosion(droid.rect, "explosion"))
                     explosion_droid.play()
                     count_destroyed_droids += 1
                 # Collision with laser and asteroids
                 for asteroid in pygame.sprite.groupcollide(group_asteroids, group_laser_player, False, True):
                     points += 5
+                    gage += 2
+                    if gage >= 100:
+                        gage = 100
+                    if self.big_laser > 0:
+                        group_laser_player.add(
+                            PlayerLaser1(asteroid.rect.midtop))
                     group_explosion.add(Explosion(asteroid.rect, "smoke"))
                     explosion_asteroid.play()
                     # We ask if it's an asteroid that provides energy to change the image.
@@ -273,6 +308,10 @@ class Game(object):
                 objectives_box.text = "Objective: {}".format(OBJECTIVE_LVL - count_destroyed_droids)
                 time_box.text = "Time: %.2f" % (elapsed_time)
                 energy_box.text = "Energy: {0}%".format(int(energy))
+                gage_box.text = "Gage: {0}%".format(int(gage))
+                specialammo_box.text = "SpecialAmmo: {0}".format(int(ammo))
+                press1_box.text = "Gage 100%: "
+                press2_box.text = "Press 'Z' key!"
                 info_box.text = "Press: ESC-Exit     F1-Help     F2-About..."
 
                 # Show the energy bar
