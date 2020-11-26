@@ -7,12 +7,12 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -26,6 +26,8 @@ from resources import *
 # ------------------------------------------------------------------------------
 #   PLAYER sprite
 # ------------------------------------------------------------------------------
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -90,11 +92,11 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        random_Enemy = random.randint(1, 2);
-        if random_Enemy == 1 : 
+        random_Enemy = random.randint(1, 2)
+        if random_Enemy == 1:
             path_img = os.path.join(os.path.dirname(
                 os.path.abspath(__file__)), "data", "images", "resources", "droid.png")
-        else : 
+        else:
             path_img = os.path.join(os.path.dirname(
                 os.path.abspath(__file__)), "data", "images", "resources", "droid2.png")
         self.image = load_image(path_img, False)
@@ -188,9 +190,9 @@ class PlayerLaser(pygame.sprite.Sprite):
         if energy >= 50:
             self.image = load_image(os.path.join(
                 'data', 'images', 'resources', 'laser1.png'), False)
-        else : 
+        else:
             self.image = load_image(os.path.join(
-                'data', 'images', 'resources', 'laser3.png'), False)
+                'data', 'images', 'resources', 'laser4.png'), False)
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
@@ -199,12 +201,13 @@ class PlayerLaser(pygame.sprite.Sprite):
             self.kill()
         else:
             self.rect.move_ip((0, -10))
+
 
 class PlayerLaser1(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image(os.path.join(
-        'data', 'images', 'resources', 'speciallaser.png'), False)
+            'data', 'images', 'resources', 'speciallaser.png'), False)
         self.rect = self.image.get_rect()
         self.rect.center = pos
 
@@ -213,6 +216,7 @@ class PlayerLaser1(pygame.sprite.Sprite):
             self.kill()
         else:
             self.rect.move_ip((0, -10))
+
 
 class LaserEnemy(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -242,6 +246,7 @@ class TextBox(pygame.sprite.Sprite):
     def update(self):
         self.image = self.font.render(self.text, True, TEXTCOLOR)
 
+
 class RedTextBox(pygame.sprite.Sprite):
     def __init__(self, text, font, pos_x, pos_y):
         pygame.sprite.Sprite.__init__(self)
@@ -253,7 +258,8 @@ class RedTextBox(pygame.sprite.Sprite):
         self.rect.y = pos_y
 
     def update(self):
-        self.image = self.font.render(self.text, True, RED_TEXTCOLOR)        
+        self.image = self.font.render(self.text, True, RED_TEXTCOLOR)
+
 
 class GreenTextBox(pygame.sprite.Sprite):
     def __init__(self, text, font, pos_x, pos_y):
@@ -267,6 +273,7 @@ class GreenTextBox(pygame.sprite.Sprite):
 
     def update(self):
         self.image = self.font.render(self.text, True, GREEN_TEXTCOLOR)
+
 
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, object_rect, type_explosion="explosion"):
@@ -298,8 +305,9 @@ class Explosion(pygame.sprite.Sprite):
                 self.image = self.lst_img_explosion[self.index]
             else:
                 self.kill()
+
+
 # ------------------------------------------------------------
 # I have to create it in this module because a class needs it.
 # ------------------------------------------------------------
 group_laser_enemy = pygame.sprite.RenderUpdates()
-
